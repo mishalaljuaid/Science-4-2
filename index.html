@@ -558,7 +558,7 @@ function calcScore() {
 
 function updateLiveScore() {
   const { total } = calcScore();
-  document.getElementById('live-score').textContent = `الدرجة: ${total} / ١٢٠`;
+  document.getElementById('live-score').textContent = 'الدرجة: ' + total.toLocaleString('ar-EG') + ' / ١٢٠';
 }
 
 function showFinalResult() {
@@ -566,7 +566,7 @@ function showFinalResult() {
   const pct = Math.round((total / 120) * 100);
   const name = document.getElementById('student-name').value.trim() || 'الطالب';
   document.getElementById('res-name').textContent = `نتيجة الطالب: ${name}`;
-  document.getElementById('res-score').textContent = total;
+  document.getElementById('res-score').textContent = total.toLocaleString('ar-EG');
   document.getElementById('bd-mcq').textContent = `${mcqS}/60`;
   document.getElementById('bd-tf').textContent  = `${tfS}/60`;
   document.getElementById('bd-pct').textContent = `${pct}%`;

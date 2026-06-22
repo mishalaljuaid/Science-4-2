@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>مراجعة العلوم الصف الرابع الإبتدائي</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a1a2e;
+    direction: rtl;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+  .page-header {
+    background: #1a3a6b;
+    color: #fff;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .page-header h1 { font-size: 16px; font-weight: 600; }
+  .page-header .meta { font-size: 12px; opacity: 0.85; }
+  .score-badge {
+    background: #fff;
+    color: #1a3a6b;
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 95px;
+    text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+  .student-bar {
+    background: #fff;
+    border-bottom: 1px solid #dde3ed;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .student-bar label { font-size: 14px; color: #555; white-space: nowrap; }
+  .student-bar input {
+    border: 1px solid #c5cfe0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 16px;
+    outline: none;
+    flex: 1;
+    min-width: 150px;
+    font-family: inherit;
+    -webkit-appearance: none;
+  }
+  .student-bar input:focus { border-color: #1a3a6b; }
+  .student-bar .total-lbl { font-size: 13px; color: #888; margin-right: auto; white-space: nowrap; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 14px 10px 70px; }
+
+  .section-title {
+    background: #1a3a6b;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 22px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .section-title .pts {
+    background: #f0c040;
+    color: #1a1a2e;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  .q-card {
+    background: #fff;
+    border: 1px solid #dde3ed;
+    border-radius: 12px;
+    padding: 16px 14px;
+    margin-bottom: 12px;
+  }
+  .q-card.answered-correct { border-right: 4px solid #2e7d32; }
+  .q-card.answered-wrong   { border-right: 4px solid #c62828; }
+
+  .q-num { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .q-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 14px;
+    line-height: 1.7;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    border: 1px solid #dde3ed;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #1a1a2e;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 50px;
+  }
+  .opt:active { background: #f0f4f8; }
+  .opt.selected { background: #e3eaf8; border-color: #1a3a6b; color: #1a3a6b; font-weight: 500; }
+  .opt.correct  { background: #e8f5e9; border-color: #2e7d32; color: #1b5e20; }
+  .opt.wrong    { background: #ffebee; border-color: #c62828; color: #7f0000; }
+  .opt-letter {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #eef1f7;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+    color: #444;
+  }
+  .opt.selected .opt-letter { background: #1a3a6b; color: #fff; }
+  .opt.correct  .opt-letter { background: #2e7d32; color: #fff; }
+  .opt.wrong    .opt-letter { background: #c62828; color: #fff; }
+
+  .tf-row { display: flex; gap: 10px; }
+  .tf-row .opt { flex: 1; justify-content: center; font-size: 17px; font-weight: 600; }
+
+  .check-btn {
+    margin-top: 14px;
+    padding: 12px 0;
+    width: 100%;
+    background: #1a3a6b;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, opacity 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .check-btn:active { background: #0f2550; }
+  .check-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .feedback {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    display: none;
+    line-height: 1.5;
+  }
+  .feedback.correct { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+  .feedback.wrong   { background: #ffebee; color: #7f0000; border: 1px solid #ef9a9a; }
+
+  .final-btn-wrap { text-align: center; margin-top: 28px; }
+  .final-btn {
+    background: #1a3a6b;
+    color: #fff;
+    border: none;
+    padding: 15px 0;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .final-btn:active { background: #0f2550; }
+
+  .result-box {
+    display: none;
+    background: #fff;
+    border: 1px solid #dde3ed;
+    border-radius: 14px;
+    padding: 24px 16px;
+    margin-top: 24px;
+    text-align: center;
+  }
+  .result-box h2 { font-size: 20px; margin-bottom: 6px; color: #1a1a2e; }
+  .result-box .big-score { font-size: 56px; font-weight: 700; color: #1a3a6b; line-height: 1; margin: 14px 0 6px; }
+  .result-box .out-of { font-size: 15px; color: #666; margin-bottom: 16px; }
+  .result-box .grade-bar { height: 10px; background: #eef1f7; border-radius: 10px; overflow: hidden; margin: 0 auto 16px; max-width: 280px; }
+  .result-box .grade-fill { height: 100%; border-radius: 10px; background: #1a3a6b; transition: width 1s ease; }
+  .result-box .msg { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .result-box .sub { font-size: 14px; color: #666; margin-bottom: 18px; }
+  .result-breakdown { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+  .breakdown-item { background: #f0f4f8; border-radius: 10px; padding: 10px 16px; font-size: 13px; color: #444; }
+  .breakdown-item strong { display: block; font-size: 20px; color: #1a3a6b; }
+  .print-btn {
+    margin-top: 16px;
+    padding: 11px 28px;
+    background: transparent;
+    color: #1a3a6b;
+    border: 1.5px solid #1a3a6b;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  @media (max-width: 480px) {
+    .page-header { padding: 12px 12px; }
+    .score-badge { font-size: 12px; padding: 6px 10px; min-width: 80px; }
+    .q-text { font-size: 15px; }
+    .opt { font-size: 14px; padding: 12px 12px; }
+    .tf-row .opt { font-size: 16px; }
+    .check-btn { font-size: 14px; }
+    .result-box .big-score { font-size: 48px; }
+  }
+  @media print {
+    .page-header, .student-bar, .check-btn, .final-btn-wrap { display: none !important; }
+    .result-box { border: none; }
+    .q-card { break-inside: avoid; }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div style="font-size:13px;opacity:0.75;margin-bottom:7px">مجمع شقصان التعليمي</div>
+    <div class="h1" style="margin-bottom:7px">مراجعة العلوم الصف الرابع الإبتدائي</div>
+    <div class="meta" style="margin-bottom:7px">الفترة الدراسية الثانية &nbsp;|&nbsp; العام الدراسي ١٤٤٧</div>
+    <div style="font-size:13px;opacity:0.8;">معلم المادة: مشعل الجعيد</div>
+  </div>
+  <div class="score-badge" id="live-score">الدرجة: — / ١٢٠</div>
+</div>
+
+<div class="student-bar">
+  <label>اسم الطالب:</label>
+  <input type="text" id="student-name" placeholder="اكتب اسمك هنا...">
+  <span class="total-lbl">الدرجة الكاملة: <strong>١٢٠</strong> درجة</span>
+</div>
+
+<div class="container">
+
+  <div class="section-title">
+    السؤال الأوّل: اختر الإجابة الصحيحة
+    <span class="pts">٦٠ درجة</span>
+  </div>
+
+  <!-- ===================== MCQ QUESTIONS ===================== -->
+  <div id="mcq-section"></div>
+
+  <div class="section-title" style="margin-top:36px">
+    السؤال الثاني: ضع علامة (صح) أو (خطأ)
+    <span class="pts">٦٠ درجة</span>
+  </div>
+
+  <div id="tf-section"></div>
+
+  <div class="final-btn-wrap">
+    <button class="final-btn" onclick="showFinalResult()">📊 عرض النتيجة النهائية</button>
+  </div>
+
+  <div class="result-box" id="result-box">
+    <div style="font-size:32px">🎓</div>
+    <h2 id="res-name">نتيجة الاختبار</h2>
+    <div class="big-score" id="res-score">0</div>
+    <div class="out-of">من أصل ١٢٠ درجة</div>
+    <div class="grade-bar"><div class="grade-fill" id="res-fill" style="width:0%"></div></div>
+    <div class="msg" id="res-msg"></div>
+    <div class="sub" id="res-sub"></div>
+    <div class="result-breakdown">
+      <div class="breakdown-item"><strong id="bd-mcq">-</strong>أسئلة الاختيار</div>
+      <div class="breakdown-item"><strong id="bd-tf">-</strong>أسئلة الصح/خطأ</div>
+      <div class="breakdown-item"><strong id="bd-pct">-</strong>النسبة المئوية</div>
+    </div>
+    <br>
+    <button class="print-btn" onclick="window.print()">🖨️ طباعة النتيجة</button>
+  </div>
+
+</div>
+
+<script>
+// =========================================================
+// DATA
+// =========================================================
+const mcqData = [
+  { q: "ما الخاصية التي تشير إلى لون مسحوق المعدن عند حكّه بقطعة خزفية بيضاء؟", opts: ["القساوة","البريق","المخدش","الانقصام"], ans: 2 },
+  { q: "أي صخر مما يلي يُعد صخراً نارياً يتميز بصلابته ومقاومته للتجوية ويُستخدم في البناء؟", opts: ["الجرانيت","الحجر الجيري","الرخام","الحجر الرملي"], ans: 0 },
+  { q: "ما نوع الصخور التي تتكون نتيجة تعرض الصخور للحرارة والضغط الشديدين؟", opts: ["الصخور النارية","الصخور الرسوبية","الصخور المتحولة","الصخور البركانية"], ans: 2 },
+  { q: "أي من المعادن التالية يُعد الأكثر قساوة وفق مقياس قساوة المعادن؟", opts: ["التلك","الجبس","الألماس","الكالسيت"], ans: 2 },
+  { q: "ما هي المادة الطبيعية غير الحية التي تشكّل الصخور؟", opts: ["الأحفورة","المعدن","الجبال","الوقود"], ans: 1 },
+  { q: "أين توجد معظم المياه العذبة على سطح الكرة الأرضية؟", opts: ["في الأنهار والجداول","في الآبار الجوفية","في القمم الجليدية والكتل الثلجية","في البحيرات الصغيرة"], ans: 2 },
+  { q: "ما هو المصدر الذي يغطي ما يقارب ثلاثة أرباع سطح الأرض ويحتوي على كمية كبيرة من الأملاح؟", opts: ["الماء العذب","المياه الجوفية","ماء البحر والمحيط","مياه الأنهار"], ans: 2 },
+  { q: "ماذا نُسمي الثقب الذي يُحفر في الأرض للوصول إلى المياه الجوفية؟", opts: ["الخزان","البئر","النهر","الوادي"], ans: 1 },
+  { q: "ما هي الخطوة التي يتم فيها إضافة مواد كيميائية للماء في محطات التنقية؟", opts: ["إزالة الأوساخ الكبيرة","لقتل البكتيريا والأجسام الضارة","لتحويل الماء إلى بخار","لتبريد الماء"], ans: 1 },
+  { q: "أي من الطرق التالية يُعد من طرق المحافظة على الماء؟", opts: ["ترك الصنبور مفتوحاً بعد الاستعمال","إصلاح أعطال المغاسل وصنابير المياه","ري المزروعات وقت الظهيرة","الإسراف في استخدام الماء أثناء الاستحمام"], ans: 1 },
+  { q: "ما الذي ينتج عن دوران الأرض حول محورها؟", opts: ["تعاقب الفصول الأربعة","تعاقب الليل والنهار","حدوث الكسوف","حدوث الخسوف"], ans: 1 },
+  { q: "كم تستغرق الأرض لتكمل دورة واحدة حول الشمس؟", opts: ["٢٤ ساعة","٢٩ يوماً","٣٦٥٫٢٥ يوماً","١٢ شهراً قمرياً"], ans: 2 },
+  { q: "ما هو الشكل الذي يشبهه مدار الأرض حول الشمس؟", opts: ["دائري تماماً","مربع","إهليلجي (شبه دائري)","حلزوني"], ans: 2 },
+  { q: "في أي وقت من النهار يكون ظل الجسم أقصر ما يمكن؟", opts: ["في الصباح الباكر","عند الظهر","بعد العصر","عند الغروب"], ans: 1 },
+  { q: "ما السبب الرئيسي لعدم وجود حياة على سطح القمر؟", opts: ["لأنه يدور حول الأرض","لأنه قريب جداً من الشمس","لعدم وجود غلاف جوي وماء","لأن سطحه أملس جداً"], ans: 2 },
+  { q: "ما هو الجرم السماوي الذي يتكون من كرة من الغازات الساخنة وينبعث منه الضوء والحرارة؟", opts: ["الكوكب","القمر","النجم","المذنب"], ans: 2 },
+  { q: "أي الكواكب التالية يُعد من الكواكب الغازية العملاقة؟", opts: ["المريخ","الزهرة","المشتري","عطارد"], ans: 2 },
+  { q: "ما الشكل الذي تدور فيه الكواكب حول الشمس كما بين العالم ألماني كبلر؟", opts: ["دائري تماماً","إهليلجي (بيضاوي)","مربع","حلزوني"], ans: 1 },
+  { q: "أين يقع حزام الكويكبات في النظام الشمسي؟", opts: ["بين الأرض والمريخ","بين المريخ والمشتري","بين المشتري وزحل","بين عطارد والزهرة"], ans: 1 },
+  { q: "ما الفرق الرئيسي بين الكوكب والنجم؟", opts: ["الكوكب مضيء بذاته والنجم يعكس الضوء","النجم أصغر حجماً من الكوكب","النجم مضيء بذاته والكوكب يعكس الضوء","الكوكب ثابت والنجم يدور حوله"], ans: 2 },
+  { q: "ما الأداة المناسبة لقياس الكتلة بدقة؟", opts: ["الميزان النابضي","الميزان ذو الكفتين","الكأس المدرجة","الشريط المتري"], ans: 1 },
+  { q: "أي من الخواص التالية يعبر عن عدد المكعبات التي تملأ جسماً ما؟", opts: ["المساحة","الكثافة","الحجم","الوزن"], ans: 2 },
+  { q: "إذا كان وزن جسم على سطح الأرض يساوي ٦٠ نيوتن، فكم سيكون وزنه تقريباً على سطح القمر؟", opts: ["١٠ نيوتن","٦٠ نيوتن","١٠٠ نيوتن","٦ نيوتن"], ans: 0 },
+  { q: "ما العملية الحسابية الصحيحة لإيجاد كثافة جسم ما؟", opts: ["الكتلة × الحجم","الطول × العرض","الكتلة ÷ الحجم","الوزن ÷ الجاذبية"], ans: 2 },
+  { q: "ما الوحدة المستخدمة لقياس القوة والوزن؟", opts: ["الجرام","اللتر","النيوتن","المتر"], ans: 2 },
+  { q: "ما المصطلح الذي يصف سرعة الجسم واتجاه حركته معاً؟", opts: ["السرعة","التسارع","السرعة المتجهة","الموقع"], ans: 2 },
+  { q: "إذا سارت سيارة مسافة ٧٠ كم في ساعة واحدة، فإن سرعتها تساوي:", opts: ["٣٥ كم/س","٧٠ كم/س","١٤٠ كم/س","١٠٠ كم/س"], ans: 1 },
+  { q: "ما القوة التي تعيق حركة الأجسام وتنشأ بين سطوح الأجسام المتلامسة؟", opts: ["الجاذبية","الدفع","الاحتكاك","القصور الذاتي"], ans: 2 },
+  { q: "تعتمد قوة الجاذبية بين جسمين على عاملين هما:", opts: ["السرعة والزمن","الكتلة والمسافة","الحجم واللون","الطول والعرض"], ans: 1 },
+  { q: "أي التغيرات التالية تُعتبر تسارعاً؟", opts: ["زيادة سرعة الجسم فقط","نقصان سرعة الجسم فقط","تغيير اتجاه الحركة فقط","جميع ما سبق (زيادة السرعة، نقصانها، أو تغير الاتجاه)"], ans: 3 },
+  { q: "أي التغيرات التالية يُعد تغيراً كيميائياً؟", opts: ["تمزيق الورقة","انصهار الجليد","حرق الخشب","كسر الزجاج"], ans: 2 },
+  { q: "ماذا نُسمي التغير الذي ينتج عنه مواد جديدة تختلف في خصائصها عن المادة الأصلية؟", opts: ["التغير الفيزيائي","التغير الكيميائي","التغير في الحالة","التبخر"], ans: 1 },
+  { q: "أي مما يلي يُعد دليلاً على حدوث تغير فيزيائي فقط؟", opts: ["تصاعد الدخان","تغير الشكل أو الحجم","تغير اللون","انطلاق الغازات"], ans: 1 },
+  { q: "ما العملية التي فيها يتحول الماء من الحالة السائلة إلى الحالة الغازية ببطء من دون أن يغلي؟", opts: ["التكثف","التجمد","الانصهار","التبخر"], ans: 3 },
+  { q: "ما المادة التي تتكون نتيجة تفاعل الحديد مع الأكسجين الموجود في الهواء؟", opts: ["الرماد","الصدأ","البخار","الكربون"], ans: 1 },
+  { q: "تستخدم عملية التقطير لفصل السوائل اعتماداً على اختلاف:", opts: ["درجات الحرارة التي تغلي عندها","أحجامها","ألوانها","أشكالها"], ans: 0 },
+  { q: "عندما يذوب الملح تماماً في الماء ويختفي، يُسمى الخليط الناتج:", opts: ["سبيكة","راسباً","محلولاً","عنصراً"], ans: 2 },
+  { q: "ما الطريقة الأنسب لفصل مشابك الورق الحديدية عن الرمل؟", opts: ["الترشيح","التبخير","المغناطيس","الترسيب"], ans: 2 },
+  { q: "أي من المخاليط التالية يُعد مثالاً على السبائك؟", opts: ["الماء والملح","السلطة","البرونز","الرمل والماء"], ans: 2 },
+  { q: "ما المصطلح العلمي الذي يطلق على مادتين أو أكثر تختلطان مغاً وتحافظ كل مادة على نوعها؟", opts: ["المحلول","المخلوط","العنصر","السبيكة"], ans: 1 },
+  { q: "إذا أُثرت قوى غير متزنة في جسم، فإنها تسبب:", opts: ["ثبات الجسم","تغير حركة الجسم","زيادة كتلة الجسم","تقليل احتكاك الجسم"], ans: 1 },
+  { q: "ما العلاقة بين كتلة الجسم والقصور الذاتي؟", opts: ["كلما زادت الكتلة قل القصور الذاتي","كلما زادت الكتلة زاد القصور الذاتي","لا توجد علاقة بينهما","الكتلة تلغي القصور الذاتي"], ans: 1 },
+  { q: "عندما تؤثر قوتان متساويتان في جسم في اتجاهين متعاكسين، فإن القوة المحصلة تسمى:", opts: ["قوى متزنة","قوى غير متزنة","قوى الاحتكاك","قوى الجاذبية"], ans: 0 },
+  { q: "القوة التي تعمل في اتجاه معاكس لاتجاه الحركة وتعمل على إبطاء الجسم هي:", opts: ["الجاذبية","الاحتكاك","الدفع","القصور الذاتي"], ans: 1 },
+  { q: "الوحدة المستخدمة لقياس القوة والوزن هي:", opts: ["الكيلوجرام","المتر","نيوتن","الثانية"], ans: 2 },
+  { q: "درجة تجمد الماء في مقياس السلسيوس هي:", opts: ["صفر درجة س","١٠ درجات س","٥٠ درجة س","١٠٠ درجة س"], ans: 0 },
+  { q: "أي المواد التالية تعد موصلاً جيداً للحرارة؟", opts: ["الصوف","الدهون","البلاستيك","الألمنيوم"], ans: 3 },
+  { q: "تنتقل الحرارة دائماً من:", opts: ["الجسم البارد إلى الجسم الساخن","الجسم الساخن إلى الجسم البارد","بين الأجسام المتساوية في درجة الحرارة","من الجسم الأصغر إلى الجسم الأكبر"], ans: 1 },
+  { q: "أي طرق انتقال الحرارة التالية تحدث في الفراغ ولا تحتاج لوسط مادي؟", opts: ["التوصيل الحراري","الإشعاع الحراري","الحمل الحراري","الانصهار"], ans: 1 },
+  { q: "ما هي الأداة التي تستخدم لقياس درجة الحرارة؟", opts: ["الميزان ذو الكفتين","الشريط المتري","الثرمومتر (مقياس الحرارة)","المخبار المدرج"], ans: 2 },
+  { q: "أداة حماية تحتوي على شريط رفيق ينصهر عند مرور تيار كهربائي كبير لفتح الدائرة تسمى:", opts: ["القاطع الكهربائي","المولد","المنصهر","المقاومة"], ans: 2 },
+  { q: "أي نوع من الدوائر الكهربائية يسري فيها التيار في مسار واحد فقط؟", opts: ["دائرة التوالي","دائرة التوازي","الدائرة المفتوحة","الدائرة المتعامدة"], ans: 0 },
+  { q: "في الدائرة الكهربائية، ما هو الجزء الذي يزود الدائرة بالطاقة لتحريك الشحنات؟", opts: ["المصباح","الأسلاك","المفتاح","البطارية"], ans: 3 },
+  { q: "ما هو المصطلح الذي يطلق على انتقال الشحنات الكهربائية من جسم إلى آخر، كما يحدث في البرق؟", opts: ["التيار الكهربائي","المقاومة الكهربائية","التفريغ الكهربائي","الدائرة الكهربائية"], ans: 2 },
+  { q: "ماذا يحدث عند تقريب جسمين مشحونين بشحنات مختلفة (موجبة وسالبة) من بعضهما؟", opts: ["يتنافران","يتجاذبان","لا يتأثران","يحترقان"], ans: 1 },
+  { q: "ما الأداة التي تستخدم إبرة ممغنطة لتحديد الاتجاهات؟", opts: ["المولد","المحرك","البوصلة","المقياس"], ans: 2 },
+  { q: "كيف يمكن زيادة قوة المغناطيس الكهربائي؟", opts: ["بإنقاص طول السلك","بإزالة القلب الحديدي","بزيادة عدد لفات السلك","بتقليل التيار الكهربائي"], ans: 2 },
+  { q: "الجهاز الذي يحول الطاقة الكهربائية إلى طاقة حركية يسمى:", opts: ["المولد الكهربائي","المحرك الكهربائي","المغناطيس الدائم","البوصلة"], ans: 1 },
+  { q: "أي من المواد التالية ينجذب إلى المغناطيس؟", opts: ["الخشب","البلاستيك","الحديد","الزجاج"], ans: 2 },
+  { q: "ماذا يحدث عند تقريب القطب الشمالي لمغناطيس من القطب الشمالي لمغناطيس آخر؟", opts: ["يتجاذبان","يتنافران","لا يحدث شيء","يولدان كهرباء"], ans: 1 },
+];
+
+const tfData = [
+  { q: "يُعتبر اللون الخاصية الوحيدة والكافية للتعرف على جميع أنواع المعادن.", ans: false },
+  { q: "تتشكل الصخور النارية ذات الحبيبات الكبيرة عندما تبرد الصهارة ببطء في باطن الأرض.", ans: true },
+  { q: "الصخور الرسوبية تتكون من تراص وتماسك الرواسب عبر ملايين السنين.", ans: true },
+  { q: "معدن التلك هو أكثر المعادن قساوة في مقياس القساوة.", ans: false },
+  { q: "يستخدم الحجر الجيري (صخر رسوبي) عادة في صناعة الطباشير والأسمنت.", ans: true },
+  { q: "المياه الجوفية هي المياه المخزنة في الفراغات بين الصخور تحت سطح الأرض.", ans: true },
+  { q: "الماء العذب يحتوي على كمية كبيرة من الأملاح ولذلك لا يصلح للشرب.", ans: false },
+  { q: "معظم الماء العذب على الأرض يوجد في الحالة السائلة في الأنهار والبحيرات.", ans: false },
+  { q: "يجب معالجة مياه الآبار والسدود قبل استخدامها لأنها قد تحتوي على بكتيريا أو مواد كيميائية.", ans: true },
+  { q: "الري هو عملية توصيل الماء إلى التربة الزراعية عبر الأنابيب وحفر القنوات.", ans: true },
+  { q: "الشمس هي التي تتحرك فعلياً في السماء من الشرق إلى الغرب بينما الأرض ثابتة.", ans: false },
+  { q: "يصدر القمر ضوءاً خاصاً به مثل النجوم.", ans: false },
+  { q: "محور الأرض مائل بزاوية مقدارها ٢٣٫٥ درجة، وهذا الميل يبقى ثابتاً أثناء دوران الأرض حول الشمس.", ans: true },
+  { q: "يحدث خسوف القمر عندما تقع الأرض بين الشمس والقمر، فتحجب ضوء الشمس عنه.", ans: true },
+  { q: "يمكن النظر إلى الشمس مباشرة بالعين المجردة بأمان أثناء الكسوف.", ans: false },
+  { q: "الشمس هي النجم الوحيد في النظام الشمسي وتقع في مركزه.", ans: true },
+  { q: "الكواكب الداخلية (الصخرية) أكبر حجماً من الكواكب الخارجية (الغازية).", ans: false },
+  { q: "المسبار الفضائي هو مركبة فضائية تحمل رواد فضاء لاستكشاف الكواكب.", ans: false },
+  { q: "النيزك هو جزء من شهاب لم يحترق كاملاً ووصل إلى سطح الأرض.", ans: true },
+  { q: "الكواكب تعكس أشعة الشمس الساقطة عليها ولا تضيء بذاتها.", ans: true },
+  { q: "الكتلة هي مقدار ما في الجسم من مادة، وهي قيمة ثابتة لا تتغير بتغير المكان.", ans: true },
+  { q: "يقاس حجم السوائل عادة باستخدام الميزان ذو الكفتين.", ans: false },
+  { q: "الوزن هو قياس لقوة الجذب (الجاذبية) بين الجسم وكوكب مثل الأرض.", ans: true },
+  { q: "الجسم الذي كثافته أقل من كثافة الماء يغوص في الماء.", ans: false },
+  { q: "وحدة قياس المساحة هي المتر المكعب (m³).", ans: false },
+  { q: "الأسطح الخشنة تنتج قوة احتكاك أكبر من الأسطح الملساء.", ans: true },
+  { q: "السرعة المتجهة تحدد مقدار سرعة الجسم فقط دون تحديد اتجاهه.", ans: false },
+  { q: "كلما زادت كتلة الجسم، زادت قوة جذبه للأجسام الأخرى.", ans: true },
+  { q: "القصور الذاتي يعني أن الجسم المتحرك يتوقف فجأة دون تأثير أي قوة خارجية.", ans: false },
+  { q: "السرعة هي التغير في المسافة بمرور الزمن.", ans: true },
+  { q: "التغير الفيزيائي يغير من شكل المادة ومظهرها ولكنه لا يحولها إلى مادة جديدة.", ans: true },
+  { q: "طبخ الطعام يعتبر مثالاً على التغير الفيزيائي لأنه يغير درجة حرارة الطعام فقط.", ans: false },
+  { q: "انصهار مكعب الجليد وتحوله إلى ماء سائل هو تغير فيزيائي.", ans: true },
+  { q: "الصدأ الذي يظهر على الدراجة الحديدية هو دليل على حدوث تغير كيميائي.", ans: true },
+  { q: "التكثف هو عملية تحول المادة من الحالة السائلة إلى الحالة الغازية.", ans: false },
+  { q: "جميع المحاليل هي مخاليط، ولكن ليس كل المخاليط محاليل.", ans: true },
+  { q: "يحدث الترسيب عندما تنفصل أجزاء من المخلوط نتيجة اختلاف كثافتها.", ans: true },
+  { q: "يمكن فصل الملح عن الماء للحصول على الملح الصلب باستخدام طريقة التبخير.", ans: true },
+  { q: "يعتبر الفولاذ نوعاً من السبائك يصنع من الحديد والكربون.", ans: true },
+  { q: "عند تكوين المخلوط، تتغير الخصائص الكيميائية للمواد المكونة له وتنتج مادة جديدة.", ans: false },
+  { q: "يمكن للمغناطيس أن يغير اتجاه حركة كرة حديدية دون أن يلمسها.", ans: true },
+  { q: "القصور الذاتي يعني مقاومة الجسم للتغير في حالة حركته.", ans: true },
+  { q: "كلما كانت كتلة الجسم أكبر، كان تسارعه أكبر عند التأثير عليه بنفس القوة.", ans: false },
+  { q: "الأسطح الملساء مثل الجليد تنتج قوة احتكاك أكبر من الأسطح الخشنة.", ans: false },
+  { q: "القوى المتزنة هي مجموعة قوى تؤثر في جسم ما ويبلغي بعضها بعضاً.", ans: true },
+  { q: "الطاقة الحرارية هي الطاقة التي تجعل جسيمات المادة في حالة حركة.", ans: true },
+  { q: "عندما يسخن السائل داخل مقياس الحرارة فإنه ينكمش وينخفض في الأنبوب.", ans: false },
+  { q: "التغيرات الكيميائية الناتجة عن الحرارة، مثل احتراق الوقود، لا يمكن عكسها لتعود كما كانت.", ans: true },
+  { q: "تعتبر الدهون مادة عازلة تساعد الثديات على الاحتفاظ بدفء أجسامها في الأماكن الباردة.", ans: true },
+  { q: "الحمل الحراري هو طريقة انتقال الحرارة في المواد الصلبة عن طريق التلامس المباشر.", ans: false },
+  { q: "القواطع الكهربائية هي مفاتيح تحمي الدوائر الكهربائية بفتحها عند مرور تيار كبير خطر.", ans: true },
+  { q: "التيار الكهربائي لا يسري إلا في مسار مغلق يسمى الدائرة الكهربائية.", ans: true },
+  { q: "في دائرة التوازي، إذا احترق أحد المصابيح فإن بقية المصابيح تنطفئ.", ans: false },
+  { q: "الشحنات الكهربائية المتشابهة (موجبة مع موجبة) تتجاذب.", ans: false },
+  { q: "الكهرباء الساكنة هي تجمع الشحنات الكهربائية على سطح جسم ما.", ans: true },
+  { q: "تكون الجسيمات المغناطيسية موزعة عشوائياً في المواد غير الممغنطة.", ans: true },
+  { q: "عند فصل التيار الكهربائي عن المغناطيس الكهربائي، فإنه يحتفظ بقوته المغناطيسية.", ans: false },
+  { q: "المولد الكهربائي يحول الطاقة الحركية إلى طاقة كهربائية.", ans: true },
+  { q: "الأقطاب المغناطيسية المختلفة (شمالي مع جنوبي) تتنافر.", ans: false },
+  { q: "المجال المغناطيسي هو المنطقة المحيطة بالمغناطيس التي تظهر فيها آثار قوته المغناطيسية.", ans: true },
+];
+
+// =========================================================
+// RENDER
+// =========================================================
+let mcqAnswers = Array(mcqData.length).fill(null);
+let mcqChecked = Array(mcqData.length).fill(false);
+let tfAnswers  = Array(tfData.length).fill(null);
+let tfChecked  = Array(tfData.length).fill(false);
+
+const letters = ['أ','ب','ج','د'];
+
+function buildMCQ() {
+  const sec = document.getElementById('mcq-section');
+  mcqData.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'mcq-card-' + i;
+    const optsHtml = item.opts.map((o, j) =>
+      `<div class="opt" id="mcq-opt-${i}-${j}" onclick="pickMCQ(${i},${j})">
+        <span class="opt-letter">${letters[j]}</span>${o}
+      </div>`
+    ).join('');
+    card.innerHTML = `
+      <div class="q-num">سؤال ${i+1} من ${mcqData.length}</div>
+      <div class="q-text">${item.q}</div>
+      <div class="options">${optsHtml}</div>
+      <button class="check-btn" id="mcq-btn-${i}" onclick="checkMCQ(${i})" disabled>✔ تحقق</button>
+      <div class="feedback" id="mcq-fb-${i}"></div>`;
+    sec.appendChild(card);
+  });
+}
+
+function buildTF() {
+  const sec = document.getElementById('tf-section');
+  tfData.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'tf-card-' + i;
+    card.innerHTML = `
+      <div class="q-num">عبارة ${i+1} من ${tfData.length}</div>
+      <div class="q-text">${item.q}</div>
+      <div class="tf-row">
+        <div class="opt" id="tf-opt-${i}-true"  onclick="pickTF(${i},true)">✓ صح</div>
+        <div class="opt" id="tf-opt-${i}-false" onclick="pickTF(${i},false)">✗ خطأ</div>
+      </div>
+      <button class="check-btn" id="tf-btn-${i}" onclick="checkTF(${i})" disabled>✔ تحقق</button>
+      <div class="feedback" id="tf-fb-${i}"></div>`;
+    sec.appendChild(card);
+  });
+}
+
+function pickMCQ(qi, oi) {
+  if (mcqChecked[qi]) return;
+  mcqAnswers[qi] = oi;
+  mcqData[qi].opts.forEach((_, j) => {
+    document.getElementById(`mcq-opt-${qi}-${j}`).className = 'opt' + (j === oi ? ' selected' : '');
+  });
+  document.getElementById(`mcq-btn-${qi}`).disabled = false;
+}
+
+function checkMCQ(qi) {
+  if (mcqChecked[qi]) return;
+  mcqChecked[qi] = true;
+  const chosen = mcqAnswers[qi];
+  const correct = mcqData[qi].ans;
+  mcqData[qi].opts.forEach((_, j) => {
+    const el = document.getElementById(`mcq-opt-${qi}-${j}`);
+    if (j === correct) el.className = 'opt correct';
+    else if (j === chosen && j !== correct) el.className = 'opt wrong';
+    else el.className = 'opt';
+  });
+  const fb = document.getElementById(`mcq-fb-${qi}`);
+  const card = document.getElementById(`mcq-card-${qi}`);
+  if (chosen === correct) {
+    fb.className = 'feedback correct'; fb.textContent = '✓ إجابة صحيحة! أحسنت';
+    card.classList.add('answered-correct');
+  } else {
+    fb.className = 'feedback wrong'; fb.textContent = `✗ إجابة خاطئة. الصواب: ${mcqData[qi].opts[correct]}`;
+    card.classList.add('answered-wrong');
+  }
+  fb.style.display = 'block';
+  document.getElementById(`mcq-btn-${qi}`).disabled = true;
+  updateLiveScore();
+}
+
+function pickTF(qi, val) {
+  if (tfChecked[qi]) return;
+  tfAnswers[qi] = val;
+  document.getElementById(`tf-opt-${qi}-true`).className  = 'opt' + (val === true  ? ' selected' : '');
+  document.getElementById(`tf-opt-${qi}-false`).className = 'opt' + (val === false ? ' selected' : '');
+  document.getElementById(`tf-btn-${qi}`).disabled = false;
+}
+
+function checkTF(qi) {
+  if (tfChecked[qi]) return;
+  tfChecked[qi] = true;
+  const chosen = tfAnswers[qi];
+  const correct = tfData[qi].ans;
+  ['true','false'].forEach(v => {
+    const el = document.getElementById(`tf-opt-${qi}-${v}`);
+    const bval = v === 'true';
+    if (bval === correct) el.className = 'opt correct';
+    else if (bval === chosen && bval !== correct) el.className = 'opt wrong';
+    else el.className = 'opt';
+  });
+  const fb = document.getElementById(`tf-fb-${qi}`);
+  const card = document.getElementById(`tf-card-${qi}`);
+  if (chosen === correct) {
+    fb.className = 'feedback correct'; fb.textContent = '✓ إجابة صحيحة! أحسنت';
+    card.classList.add('answered-correct');
+  } else {
+    fb.className = 'feedback wrong'; fb.textContent = `✗ إجابة خاطئة. الصواب: ${correct ? 'صح ✓' : 'خطأ ✗'}`;
+    card.classList.add('answered-wrong');
+  }
+  fb.style.display = 'block';
+  document.getElementById(`tf-btn-${qi}`).disabled = true;
+  updateLiveScore();
+}
+
+function calcScore() {
+  let mcqS = 0, tfS = 0;
+  mcqData.forEach((item,i) => { if (mcqChecked[i] && mcqAnswers[i] === item.ans) mcqS++; });
+  tfData.forEach((item,i)  => { if (tfChecked[i]  && tfAnswers[i]  === item.ans) tfS++;  });
+  return { mcqS, tfS, total: mcqS + tfS };
+}
+
+function updateLiveScore() {
+  const { total } = calcScore();
+  document.getElementById('live-score').textContent = `الدرجة: ${total} / ١٢٠`;
+}
+
+function showFinalResult() {
+  const { mcqS, tfS, total } = calcScore();
+  const pct = Math.round((total / 120) * 100);
+  const name = document.getElementById('student-name').value.trim() || 'الطالب';
+  document.getElementById('res-name').textContent = `نتيجة الطالب: ${name}`;
+  document.getElementById('res-score').textContent = total;
+  document.getElementById('bd-mcq').textContent = `${mcqS}/60`;
+  document.getElementById('bd-tf').textContent  = `${tfS}/60`;
+  document.getElementById('bd-pct').textContent = `${pct}%`;
+  let msg = '', sub = '', color = '';
+  if (pct >= 90)      { msg = '🌟 ممتاز جداً';     sub = 'أداء رائع ومتميز، استمر!';            color = '#1a3a6b'; }
+  else if (pct >= 80) { msg = '🎉 ممتاز';           sub = 'أحسنت، نتيجة جيدة جداً!';            color = '#1a3a6b'; }
+  else if (pct >= 70) { msg = '👍 جيد جداً';       sub = 'جهد جيد، يمكنك التحسين أكثر.';       color = '#2e7232'; }
+  else if (pct >= 60) { msg = '✅ جيد';             sub = 'مررت الاختبار، راجع الأخطاء.';        color = '#b35a00'; }
+  else                { msg = '💪 يحتاج مراجعة';   sub = 'راجع الدروس وأعد المحاولة.';          color = '#8b0000'; }
+  document.getElementById('res-msg').textContent = msg;
+  document.getElementById('res-msg').style.color = color;
+  document.getElementById('res-sub').textContent = sub;
+  const box = document.getElementById('result-box');
+  box.style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('res-fill').style.width = pct + '%';
+  }, 100);
+  box.scrollIntoView({ behavior: 'smooth' });
+}
+
+buildMCQ();
+buildTF();
+</script>
+</body>
+</html>
